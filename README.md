@@ -32,7 +32,7 @@
 - 封装了http/国际化/定时任务/线程池/JwtToken转换/错误码等；
 - 封装了常用的各种工具类
 
-## 3. bq-base不能做什么
+## 3. bq-base最佳实践
 - bq-base最佳实践是配合springboot一起使用，bq-base中的能力在[bq-boot-root](https://github.com/woollay/bq-boot-root) 和[bq-boot-base](https://github.com/woollay/bq-boot-base) 
 中有更好的体现；
 

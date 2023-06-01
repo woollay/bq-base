@@ -1,4 +1,4 @@
-# 基于Spring二次封装的bq-base组件的说明
+# bq-base组件的使用说明
 - 本组件基于spring framework二次封装，主要是为了简化和固化常规的业务场景，当然也支持灵活的配置扩展：
 - 本组件引入方法：
     ```xml
@@ -33,5 +33,6 @@
 - 封装了常用的各种工具类
 
 ## 3. bq-base不能做什么
+- bq-base最佳实践是配合springboot一起使用，bq-base中的能力在bq-boot-super和bq-boot-base中有更好的体现；
 
 

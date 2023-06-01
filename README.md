@@ -33,6 +33,7 @@
 - 封装了常用的各种工具类
 
 ## 3. bq-base不能做什么
-- bq-base最佳实践是配合springboot一起使用，bq-base中的能力在bq-boot-super和bq-boot-base中有更好的体现；
+- bq-base最佳实践是配合springboot一起使用，bq-base中的能力在[bq-boot-root](https://github.com/woollay/bq-boot-root) 和[bq-boot-base](https://github.com/woollay/bq-boot-base) 
+中有更好的体现；
 
 

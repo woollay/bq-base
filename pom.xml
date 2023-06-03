@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.biuqu</groupId>
         <artifactId>bq-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
 
     <artifactId>bq-base</artifactId>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>com.biuqu</groupId>
             <artifactId>bq-encryptor</artifactId>
-            <version>${project.version}</version>
+            <version>${bq.version}</version>
         </dependency>
 
         <dependency>

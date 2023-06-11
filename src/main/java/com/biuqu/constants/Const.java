@@ -14,6 +14,16 @@ public final class Const
     public static final String PROPERTIES_FILE_SUFFIX = ".properties";
 
     /**
+     * Json打码服务名
+     */
+    public static final String JSON_MASK_SVC = "JsonRuleSvc";
+
+    /**
+     * Json忽略服务名
+     */
+    public static final String JSON_IGNORE_SVC = "JsonIgnoreSvc";
+
+    /**
      * JwtToken中的Bearer类型
      */
     public static final String JWT_BEARER_TYPE = "Bearer";

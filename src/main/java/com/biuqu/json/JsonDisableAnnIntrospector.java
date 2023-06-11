@@ -1,5 +1,6 @@
 package com.biuqu.json;
 
+import com.biuqu.annotation.JsonFuzzyAnn;
 import com.biuqu.annotation.JsonMaskAnn;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
@@ -17,7 +18,7 @@ public class JsonDisableAnnIntrospector extends JacksonAnnotationIntrospector
     public boolean isAnnotationBundle(Annotation ann)
     {
         //屏蔽注解
-        if (ann instanceof JsonMaskAnn)
+        if (ann instanceof JsonMaskAnn || ann instanceof JsonFuzzyAnn)
         {
             return false;
         }

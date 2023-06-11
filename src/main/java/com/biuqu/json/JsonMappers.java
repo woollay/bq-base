@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.time.Instant;
 import java.util.Set;
@@ -46,12 +46,46 @@ public final class JsonMappers
     /**
      * 获取带忽略属性的Mapper对象
      *
+     * @param mapper       jackson转换器
      * @param ignoreFields 忽略的属性列表
-     * @param mask         是否打码
-     * @param snake        是否兼容驼峰和下划线转换
      * @return Mapper对象的新Writer对象
      */
-    public static ObjectWriter getIgnoreWriter(Set<String> ignoreFields, boolean mask, boolean snake)
+    public static ObjectWriter getIgnoreWriter(ObjectMapper mapper, Set<String> ignoreFields)
+    {
+        if (!CollectionUtils.isEmpty(ignoreFields))
+        {
+            SimpleFilterProvider provider = new SimpleFilterProvider();
+            SimpleBeanPropertyFilter fieldFilter = SimpleBeanPropertyFilter.serializeAllExcept(ignoreFields);
+            provider.addFilter(IGNORE_ID, fieldFilter);
+            //对所有的Object的子类都生效的属性过滤
+            mapper.addMixIn(Object.class, JsonIgnoreField.class);
+            return mapper.writer(provider);
+        }
+        return mapper.writer();
+    }
+
+    /**
+     * 获取带忽略属性的Mapper对象
+     *
+     * @param ignoreFields 忽略的属性列表
+     * @param snake        true表示兼容驼峰和下划线转换
+     * @param mask         true表示打码
+     * @return Mapper对象的新Writer对象
+     */
+    public static ObjectWriter getIgnoreWriter(Set<String> ignoreFields, boolean snake, boolean mask)
+    {
+        ObjectMapper mapper = getMaskMapper(snake, mask);
+        return getIgnoreWriter(mapper, ignoreFields);
+    }
+
+    /**
+     * 获取带打码属性的Mapper对象
+     *
+     * @param snake true表示兼容驼峰和下划线转换
+     * @param mask  true表示打码
+     * @return Mapper对象
+     */
+    public static ObjectMapper getMaskMapper(boolean snake, boolean mask)
     {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -65,16 +99,7 @@ public final class JsonMappers
         {
             mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         }
-        if (!CollectionUtils.isEmpty(ignoreFields))
-        {
-            SimpleFilterProvider provider = new SimpleFilterProvider();
-            SimpleBeanPropertyFilter fieldFilter = SimpleBeanPropertyFilter.serializeAllExcept(ignoreFields);
-            provider.addFilter(IGNORE_ID, fieldFilter);
-            //对所有的Object的子类都生效的属性过滤
-            mapper.addMixIn(Object.class, JsonIgnoreField.class);
-            return mapper.writer(provider);
-        }
-        return mapper.writer();
+        return mapper;
     }
 
     private JsonMappers()

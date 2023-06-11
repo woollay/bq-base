@@ -20,7 +20,8 @@ public abstract class BaseJsonSerializer<T> extends JsonSerializer<T>
     public void serialize(T value, JsonGenerator jsonGen, SerializerProvider provider) throws IOException
     {
         String name = jsonGen.getOutputContext().getCurrentName();
-        Object newValue = getNewValue(name, value);
+        Object object = provider.getGenerator().currentValue();
+        Object newValue = getNewValue(object, name, value);
         if (value instanceof String)
         {
             if (newValue instanceof String)
@@ -30,16 +31,17 @@ public abstract class BaseJsonSerializer<T> extends JsonSerializer<T>
         }
         else if (value instanceof Instant)
         {
-            jsonGen.writeNumber(Long.parseLong(getNewValue(name, value) + StringUtils.EMPTY));
+            jsonGen.writeNumber(Long.parseLong(newValue + StringUtils.EMPTY));
         }
     }
 
     /**
      * 获取序列后的新值
      *
-     * @param key   键值对的key
-     * @param value 键值对的value
+     * @param object 原始对象
+     * @param key    键值对的key
+     * @param value  键值对的value
      * @return 新值
      */
-    protected abstract Object getNewValue(String key, T value);
+    protected abstract Object getNewValue(Object object, String key, T value);
 }

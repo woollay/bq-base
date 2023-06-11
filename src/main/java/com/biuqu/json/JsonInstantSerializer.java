@@ -11,7 +11,7 @@ import java.time.Instant;
 public class JsonInstantSerializer extends BaseJsonSerializer<Instant>
 {
     @Override
-    protected Object getNewValue(String key, Instant value)
+    protected Object getNewValue(Object object, String key, Instant value)
     {
         return value.toEpochMilli();
     }

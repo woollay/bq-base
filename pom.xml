@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>bq-base</artifactId>
+    <version>1.0.4</version>
     <description>easy use for simple spring project</description>
     <url>https://github.com/woollay/bq-base</url>
 

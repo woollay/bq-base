@@ -230,7 +230,7 @@ public final class JsonUtil
      */
     public static <T> String toJson(T t, Set<String> ignoreFields, boolean snake)
     {
-        ObjectWriter writer = JsonMappers.getIgnoreWriter(ignoreFields, false, snake);
+        ObjectWriter writer = JsonMappers.getIgnoreWriter(ignoreFields, snake, false);
         try
         {
             return writer.writeValueAsString(t);
@@ -291,7 +291,7 @@ public final class JsonUtil
      */
     public static <T> String toMask(T t, Set<String> ignoreFields, boolean snake)
     {
-        ObjectWriter writer = JsonMappers.getIgnoreWriter(ignoreFields, true, snake);
+        ObjectWriter writer = JsonMappers.getIgnoreWriter(ignoreFields, snake, true);
         try
         {
             return writer.writeValueAsString(t);

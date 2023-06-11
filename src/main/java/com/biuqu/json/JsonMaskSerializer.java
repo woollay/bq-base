@@ -1,5 +1,8 @@
 package com.biuqu.json;
 
+import com.biuqu.constants.Const;
+import com.biuqu.context.ApplicationContextHolder;
+
 /**
  * 打码json属性的序列化的具体实现
  *
@@ -9,8 +12,16 @@ package com.biuqu.json;
 public class JsonMaskSerializer extends BaseJsonSerializer<String>
 {
     @Override
-    protected Object getNewValue(String key, String value)
+    protected Object getNewValue(Object object, String key, String value)
     {
-        return JsonRuleMgr.applyRule(key, value);
+        if (ApplicationContextHolder.containsBean(Const.JSON_MASK_SVC))
+        {
+            JsonMaskMgr maskMgr = ApplicationContextHolder.getBean(Const.JSON_MASK_SVC);
+            return maskMgr.applyRule(object.getClass().getName(), key, value);
+        }
+        else
+        {
+            return JsonRuleMgr.applyRule(key, value);
+        }
     }
 }

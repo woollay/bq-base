@@ -4,16 +4,12 @@ import com.biuqu.annotation.JsonMaskAnn;
 import com.biuqu.model.JsonRule;
 import com.biuqu.model.ResultCode;
 import com.biuqu.utils.JsonUtil;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -100,25 +96,16 @@ public class JsonUtilTest
     }
 
     @Test
-    public void toJson2() throws JsonProcessingException
+    public void toJson2()
     {
+        String json1 = JsonUtil.toJson(this.person);
+        System.out.println("json1=" + json1);
+        Assert.assertTrue(json1.contains("pwd"));
+
         Set<String> ignoreFields = Sets.newHashSet("pwd");
-
-        SimpleFilterProvider provider = new SimpleFilterProvider();
-        SimpleBeanPropertyFilter fieldFilter = SimpleBeanPropertyFilter.serializeAllExcept(ignoreFields);
-        provider.addFilter(JsonMappers.IGNORE_ID, fieldFilter);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        mapper.setAnnotationIntrospector(new JsonDisableAnnIntrospector());
-
-        mapper.addMixIn(Object.class, JsonIgnoreField.class);
-        ObjectWriter objectWriter = mapper.writer(provider);
-
-        String json = objectWriter.writeValueAsString(person);
-        System.out.println("ignore json=" + json);
+        String json2 = JsonUtil.toJson(this.person, ignoreFields);
+        System.out.println("json2=" + json2);
+        Assert.assertTrue(!json2.contains("pwd"));
     }
 
     @Test
@@ -163,6 +150,95 @@ public class JsonUtilTest
         JSONObject jsonObject = new JSONObject(json);
         Object time = jsonObject.get("time");
         Assert.assertTrue((time instanceof Long) && time.toString().length() == 13);
+    }
+
+    @Test
+    public void testAlias()
+    {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("message", "msg1");
+        String json = JsonUtil.toJson(map);
+        Result result1 = JsonUtil.toObject(json, Result.class);
+        System.out.println("alias json1=" + JsonUtil.toJson(result1));
+
+        Map<String, String> map2 = Maps.newHashMap();
+        map2.put("tips", "tip1");
+        String json2 = JsonUtil.toJson(map2);
+        Result result2 = JsonUtil.toObject(json2, Result.class);
+        System.out.println("alias json2=" + JsonUtil.toJson(result2));
+
+        Map<String, String> map3 = Maps.newHashMap();
+        map3.put("msg", "msg2");
+        String json3 = JsonUtil.toJson(map3);
+        Result result3 = JsonUtil.toObject(json3, Result.class);
+        System.out.println("alias json3=" + JsonUtil.toJson(result3));
+    }
+
+    @Test
+    public void testProperty()
+    {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("user", "user1");
+        String json = JsonUtil.toJson(map);
+        Result result1 = JsonUtil.toObject(json, Result.class);
+        System.out.println("property json1=" + JsonUtil.toJson(result1));
+
+        Map<String, String> map2 = Maps.newHashMap();
+        map2.put("name", "user2");
+        String json2 = JsonUtil.toJson(map2);
+        Result result2 = JsonUtil.toObject(json2, Result.class);
+        System.out.println("property json2=" + JsonUtil.toJson(result2));
+
+        Result param3 = new Result();
+        param3.setUser("user3");
+        String json3 = JsonUtil.toJson(param3);
+        Result result3 = JsonUtil.toObject(json3, Result.class);
+        System.out.println("property json3=" + JsonUtil.toJson(result3));
+    }
+
+    @Test
+    public void testIgnore()
+    {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("spanId", "span1");
+        String json = JsonUtil.toJson(map);
+        Result result1 = JsonUtil.toObject(json, Result.class);
+        System.out.println("ignore json1=" + JsonUtil.toJson(result1));
+
+        Result param2 = new Result();
+        param2.setSpanId("span2");
+        System.out.println("ignore json2=" + JsonUtil.toJson(param2));
+    }
+
+    @Test
+    public void testIgnore2()
+    {
+        Result result1 = new Result();
+        result1.setId("req001");
+        String json1 = JsonUtil.toJson(result1);
+        System.out.println("json1=" + json1);
+        Assert.assertTrue(json1.contains("id"));
+
+        Set<String> ignoreFields = Sets.newHashSet("id");
+        String json2 = JsonUtil.toJson(result1, ignoreFields);
+        System.out.println("json2=" + json2);
+        Assert.assertTrue(!json2.contains("id"));
+    }
+
+    @NoArgsConstructor
+    @Data
+    private static class Result
+    {
+        @JsonAlias({"message", "tips", "msg"})
+        private String msg;
+
+        @JsonProperty("name")
+        private String user;
+
+        @JsonIgnore
+        private String spanId;
+
+        private String id;
     }
 
     @NoArgsConstructor

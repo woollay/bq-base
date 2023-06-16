@@ -1,5 +1,6 @@
 package com.biuqu.json;
 
+import com.biuqu.annotation.JsonFuzzyAnn;
 import com.biuqu.annotation.JsonMaskAnn;
 import com.biuqu.model.JsonRule;
 import com.biuqu.model.ResultCode;
@@ -225,6 +226,17 @@ public class JsonUtilTest
         Assert.assertTrue(!json2.contains("id"));
     }
 
+    @Test
+    public void testFuzzy()
+    {
+        Result result1 = new Result();
+        result1.setSign("sign001");
+        String json1 = JsonUtil.toMask(result1);
+        System.out.println("json1=" + json1);
+        Assert.assertTrue(json1.contains("sign"));
+        Assert.assertTrue(!json1.contains(result1.getSign()));
+    }
+
     @NoArgsConstructor
     @Data
     private static class Result
@@ -239,6 +251,9 @@ public class JsonUtilTest
         private String spanId;
 
         private String id;
+
+        @JsonFuzzyAnn
+        private String sign;
     }
 
     @NoArgsConstructor

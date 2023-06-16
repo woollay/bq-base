@@ -49,6 +49,18 @@ public class JasyptEncryptorTest
     }
 
     @Test
+    public void testDbPwd()
+    {
+        String dbPwd = "postgres";
+        BaseSecureSingleEncryption handler = new Sm4SecureEncryption();
+        String key = "f056513b001bda32d80d1c6da4e59e0e";
+        JasyptEncryptor jasyptEncryptor = new JasyptEncryptor(handler, key);
+        String encDbPwd = jasyptEncryptor.encrypt(dbPwd);
+        String decDbPwd = jasyptEncryptor.decrypt(encDbPwd);
+        System.out.println(String.format("Jasypt encrypt db[%s]enc:ENC(%s),dec:%s", dbPwd, encDbPwd, decDbPwd));
+    }
+
+    @Test
     public void testEncSecurityByEnc()
     {
         BaseSecureSingleEncryption handler = new Sm4SecureEncryption();

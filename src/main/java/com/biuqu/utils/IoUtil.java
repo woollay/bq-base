@@ -45,7 +45,7 @@ public final class IoUtil
                 return new FileInputStream(realPath);
             }
             Resource resource = new PathMatchingResourcePatternResolver().getResource(path);
-            boolean existFile = null != resource && resource.exists();
+            boolean existFile = resource.exists();
             //jar包模式运行时,通过spring的api去读取
             if (existFile)
             {

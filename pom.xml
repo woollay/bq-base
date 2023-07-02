@@ -8,11 +8,10 @@
     <parent>
         <groupId>com.biuqu</groupId>
         <artifactId>bq-parent</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.5</version>
     </parent>
 
     <artifactId>bq-base</artifactId>
-    <version>1.0.4</version>
     <description>easy use for simple spring project</description>
     <url>https://github.com/woollay/bq-base</url>
 

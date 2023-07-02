@@ -123,5 +123,5 @@ public final class CharUtil
      * 中文名字等字符串匹配表达式
      */
     private static final String CHINESE_REGEX =
-        "^([\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff\\x{20000}-\\x{323af}\\u2180-\\u2ef3\\u2f00-\\u2fd5\\u2ff0-\\u2ffb\\u3105-\\u312f\\u31a0-\\u31bf\\u31c0-\\u31e3\\u3007])+$";
+        "^([\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff\\x{20000}-\\x{323af}\\u2180-\\u2ef3\\u2f00-\\u2fd5\\u2ff0-\\u2ffb\\u3105-\\u312f\\u31a0-\\u31bf\\u31c0-\\u31e3\\u3007·])+$";
 }
